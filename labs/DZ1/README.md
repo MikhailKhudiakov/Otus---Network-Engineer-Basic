@@ -346,6 +346,7 @@ S1#
 
 ![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ1/ip%20PC1.bmp)
 
+![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ1/ip%20PC.bmp)
 
 
 

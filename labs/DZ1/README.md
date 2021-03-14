@@ -344,5 +344,8 @@ S1#
 5)	Выберите Протокол Интернета версии 4 (TCP/IPv4) > Свойства.
 6)	Выберите Использовать следующий IP-адрес и введите IP-адрес и маску подсети  и нажмите ОК.
 
+![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ1/ip%20PC1.bmp)
+
+
 
 

@@ -250,4 +250,98 @@ Directory of flash:/
 ```
 Образу Cisco IOS присвоено имя 2960-lanbasek9-mz.150-2.SE4.bin
 ```
+### Часть 2. Настройка базовых параметров сетевых устройств
+Во второй части необходимо будет настроить основные параметры коммутатора и компьютера.
+
+#### Шаг 1. Настройте базовые параметры коммутатора.
+
+a.	В режиме глобальной конфигурации скопируйте следующие базовые параметры конфигурации и вставьте их в файл на коммутаторе S1. 
+
+no ip domain-lookup
+
+hostname S1
+
+service password-encryption
+
+enable secret class
+
+banner motd #
+
+Unauthorized access is strictly prohibited. #
+
+```
+Switch(config)#no ip domain-lookup
+Switch(config)#hostname S1
+S1(config)#service password-encryption
+S1(config)#enable secret class
+S1(config)#banner motd #
+Enter TEXT message.  End with the character '#'.
+Unauthorized access is strictly prohibited. #
+
+```
+
+b.	Назначьте IP-адрес интерфейсу SVI на коммутаторе. Благодаря этому вы получите возможность удаленного управления коммутатором.
+Прежде чем вы сможете управлять коммутатором S1 удаленно с компьютера PC-A, коммутатору нужно назначить IP-адрес. Согласно конфигурации по умолчанию коммутатором можно управлять через VLAN 1. Однако в базовой конфигурации коммутатора не рекомендуется назначать VLAN 1 в качестве административной VLAN.
+```
+Unauthorized access is strictly prohibited. 
+
+S1>en
+Password: 
+S1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S1(config)#interface vlan1
+S1(config-if)#ip address 192.168.1.2 255.255.255.0
+S1(config-if)#no shutdown
+
+S1(config-if)#
+%LINK-5-CHANGED: Interface Vlan1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
+```
+
+c.	Доступ через порт консоли также следует ограничить  с помощью пароля. Используйте cisco в качестве пароля для входа в консоль в этом задании. Конфигурация по умолчанию разрешает все консольные подключения без пароля. Чтобы консольные сообщения не прерывали выполнение команд, используйте параметр logging synchronous.
+
+S1(config)# line con 0
+S1(config-line)# logging synchronous 
+```
+S1(config)#line console 0
+S1(config-line)#password cisco
+S1(config-line)#login
+S1(config-line)#end
+S1#
+%SYS-5-CONFIG_I: Configured from console by console
+```
+
+d.	Настройте каналы виртуального соединения для удаленного управления (vty), чтобы коммутатор разрешил доступ через Telnet. Если не настроить пароль VTY, будет невозможно подключиться к коммутатору по протоколу Telnet.
+```
+S1#
+S1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S1(config)#
+S1(config)#line vty 0 15
+S1(config-line)#password cisco
+S1(config-line)#login
+S1(config-line)#end
+S1#
+%SYS-5-CONFIG_I: Configured from console by console
+```
+Вопрос:
+Для чего нужна команда login?
+```
+
+```
+
+#### Шаг 2. Настройте IP-адрес на компьютере PC-A.
+
+Назначьте компьютеру IP-адрес и маску подсети в соответствии с таблицей адресации.
+
+Назначьте компьютеру IP-адрес и маску подсети в соответствии с таблицей адресации.
+1)	Перейдите в Панель управления. (Control Panel)
+2)	В представлении «Категория» выберите « Просмотр состояния сети и задач».
+3)	Щелкните Изменение параметров адаптера на левой панели.
+4)	Щелкните правой кнопкой мыши интерфейс Ethernet и выберите «Свойства» .
+5)	Выберите Протокол Интернета версии 4 (TCP/IPv4) > Свойства.
+6)	Выберите Использовать следующий IP-адрес и введите IP-адрес и маску подсети  и нажмите ОК.
+
+
 

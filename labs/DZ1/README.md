@@ -309,6 +309,7 @@ S1(config)#line console 0
 S1(config-line)#password cisco
 S1(config-line)#login
 S1(config-line)#end
+S1(config-line)#logging synchronous
 S1#
 %SYS-5-CONFIG_I: Configured from console by console
 ```

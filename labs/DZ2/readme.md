@@ -48,6 +48,18 @@ S1(config-if)#
 
 %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
 ````
+````S2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S2(config)#int vlan1
+S2(config-if)#ip address 192.168.1.12 255.255.255.0
+S2(config-if)#no shutdown
+
+S2(config-if)#
+%LINK-5-CHANGED: Interface Vlan1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
+````
+
   с.Назначьте **cisco** в качетсве паролей консоли и VTY.
   
   d.Назначьте **class** в качестве пароля доступа к привелегированному режиму EXEC.

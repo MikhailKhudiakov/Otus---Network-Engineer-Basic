@@ -20,6 +20,20 @@ PC-B|NIC|192.168.1.2|255.255.255.0
 ![]()
 #### Шаг 3.Выполните инициализацию и перезагрузку коммутаторов.
 ![]()
+````Switch>enable
+Switch#show flash
+Directory of flash:/
+
+    1  -rw-     4670455          <no date>  2960-lanbasek9-mz.150-2.SE4.bin
+
+64016384 bytes total (59345929 bytes free)
+Switch#erase startup-config
+Erasing the nvram filesystem will remove all configuration files! Continue? [confirm]
+[OK]
+Erase of nvram: complete
+%SYS-7-NV_BLOCK_INIT: Initialized the geometry of nvram
+Switch#reload
+````
 #### Шаг 4.Настройте базовые параметры каждого коммутатора.
   а.Настройте имена утройств в соответствии с топологией.
   b.Настройте IP-адреса, как указано в таблице адресации.

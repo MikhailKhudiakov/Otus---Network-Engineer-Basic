@@ -39,3 +39,18 @@ Switch#reload
   b.Настройте IP-адреса, как указано в таблице адресации.
   с.Назначьте **cisco** в качетсве паролей консоли и VTY.
   d.Назначьте **class** в качестве пароля доступа к привелегироdанному режиму EXEC.
+  ````Switch>enable
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#no ip domain-lookup
+Switch(config)#hostname S2
+S2(config)#service password-encryption
+S2(config)#enable secret class
+S2(config)#line console 0
+S2(config-line)#password cisco
+S2(config-line)#login
+S2(config-line)#end
+S2#
+%SYS-5-CONFIG_I: Configured from console by console
+````
+

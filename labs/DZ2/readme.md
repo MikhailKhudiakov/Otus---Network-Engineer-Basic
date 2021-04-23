@@ -37,7 +37,17 @@ Switch#reload
   а.Настройте имена утройств в соответствии с топологией.
   
   b.Настройте IP-адреса, как указано в таблице адресации.
-  
+  ````S1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S1(config)#int vlan1
+S1(config-if)#ip address 192.168.1.11 255.255.255.0
+S1(config-if)#no shutdown
+
+S1(config-if)#
+%LINK-5-CHANGED: Interface Vlan1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
+````
   с.Назначьте **cisco** в качетсве паролей консоли и VTY.
   
   d.Назначьте **class** в качестве пароля доступа к привелегированному режиму EXEC.

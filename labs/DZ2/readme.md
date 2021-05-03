@@ -88,19 +88,6 @@ a. MAC-адреса PC
     C:\>ipconfig /all
     FastEthernet0 Connection:(default port)
     Connection-specific DNS Suffix..: 
-    Physical Address................: 000C.85B0.C004
-    Link-local IPv6 Address.........: FE80::20C:85FF:FEB0:C004
-    IPv6 Address....................: ::
-    IPv4 Address....................: 192.168.1.2
-    Subnet Mask.....................: 255.255.255.0
-    Default Gateway.................: ::
-                                     0.0.0.0                          
-   ````
-   
-   ````
-    C:\>ipconfig /all
-    FastEthernet0 Connection:(default port)
-    Connection-specific DNS Suffix..: 
     Physical Address................: 0010.1194.6594
     Link-local IPv6 Address.........: FE80::210:11FF:FE94:6594
     IPv6 Address....................: ::
@@ -108,6 +95,20 @@ a. MAC-адреса PC
     Subnet Mask.....................: 255.255.255.0
     Default Gateway.................: ::
                                      0.0.0.0
+                     
+   ````
+   
+   ````
+    C:\>ipconfig /all
+    FastEthernet0 Connection:(default port)
+    Connection-specific DNS Suffix..: 
+    Physical Address................: 000C.85B0.C004
+    Link-local IPv6 Address.........: FE80::20C:85FF:FEB0:C004
+    IPv6 Address....................: ::
+    IPv4 Address....................: 192.168.1.2
+    Subnet Mask.....................: 255.255.255.0
+    Default Gateway.................: ::
+                                     0.0.0.0        
    ````
   
    ````  

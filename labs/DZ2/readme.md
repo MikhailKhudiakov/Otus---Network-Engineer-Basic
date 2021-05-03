@@ -79,4 +79,56 @@ S2(config-line)#end
 S2#
 %SYS-5-CONFIG_I: Configured from console by console
 ````
+### Часть 2. Изучение таблицы МАС-адресов коммутатора
+#### Шаг 1. Запишите МАС-адреса сетевых устройств.
 
+a. MAC-адреса PC
+ 
+   ````
+    C:\>ipconfig /all
+    FastEthernet0 Connection:(default port)
+    Connection-specific DNS Suffix..: 
+    Physical Address................: 000C.85B0.C004
+    Link-local IPv6 Address.........: FE80::20C:85FF:FEB0:C004
+    IPv6 Address....................: ::
+    IPv4 Address....................: 192.168.1.2
+    Subnet Mask.....................: 255.255.255.0
+    Default Gateway.................: ::
+                                     0.0.0.0                          
+   ````
+   
+   ````
+    C:\>ipconfig /all
+    FastEthernet0 Connection:(default port)
+    Connection-specific DNS Suffix..: 
+    Physical Address................: 0010.1194.6594
+    Link-local IPv6 Address.........: FE80::210:11FF:FE94:6594
+    IPv6 Address....................: ::
+    IPv4 Address....................: 192.168.1.1
+    Subnet Mask.....................: 255.255.255.0
+    Default Gateway.................: ::
+                                     0.0.0.0
+   ````
+  
+   ````  
+    MAC-адрес компьютера PC-A:000C.85B0.C004
+    MAC-адрес компьютера PC-B:0010.1194.6594
+
+   ````
+b. MAC-адреса коммутаторов
+
+   ```` 
+   S1>show interface f0/1
+   FastEthernet0/1 is up, line protocol is up (connected)
+   Hardware is Lance, address is 0003.e497.b701 (bia 0003.e497.b701)
+   ````
+   ````
+   S2>show interface f0/1
+   FastEthernet0/1 is up, line protocol is up (connected)
+   Hardware is Lance, address is 00e0.f9b4.7301 (bia 00e0.f9b4.7301)
+   ````
+   ````
+    МАС-адрес коммутатора S1 Fast Ethernet 0/1:0003.e497.b701
+    МАС-адрес коммутатора S2 Fast Ethernet 0/1:00e0.f9b4.7301
+    
+   ````

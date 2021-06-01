@@ -156,7 +156,9 @@ R1(config-line)#exit
 ```
 R1#copy running-config startup-config 
 ```
-Шаг 6. Установите соединение с маршрутизатором по протоколу SSH.
+#### Шаг 6. Установите соединение с маршрутизатором по протоколу SSH.
 a.	Запустите Tera Term с PC-A.
-b.	Установите SSH-подключение к R1. Use the username admin and password Adm1nP@55. У вас должно получиться установить SSH-подключение к R1.
+
+b.	Установите SSH-подключение к R1. 
+![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ5/ssh.bmp)
 

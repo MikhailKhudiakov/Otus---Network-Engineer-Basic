@@ -94,15 +94,116 @@ GigabitEthernet0/0/0 is up, line protocol is up
     2001:DB8:ACAD:A::1, subnet is 2001:DB8:ACAD:A::/64
   Joined group address(es):
     FF02::1
-    FF02::2
     FF02::1:FF00:1
 ```
 ```
 Интерфейсу G0/0/0 назаначены два мультикастовых адреса для групп многоадресной рассылки: 
-FF02::1 группа многоадресной рассылки всех узлов IPv6 в локальной сети или канале;
-FF02::2 группа многоадресной рассылки всех роутреров IPv6;
+FF02::1 группа многоадресной рассылки всех узлов IPv6 в локальной сети или канале,
 а также FF02::1:FF00:1 групповой адрес запрашиваемого узла для многоадресной рассылки на запрашиваемые узлы.
 ```
+#### Шаг 2. Активируйте IPv6-маршрутизацию на R1.
+a.	В командной строке на PC-B введите команду ipconfig, чтобы получить данные IPv6-адреса, назначенного интерфейсу ПК.
+```
+C:\>ipconfig
+FastEthernet0 Connection:(default port)
+
+   Connection-specific DNS Suffix..: 
+   Link-local IPv6 Address.........: FE80::2D0:BAFF:FE65:588B
+   IPv6 Address....................: ::
+   IPv4 Address....................: 0.0.0.0
+   Subnet Mask.....................: 0.0.0.0
+   Default Gateway.................: ::
+                                     0.0.0.0
+```
+Вопрос:Назначен ли индивидуальный IPv6-адрес сетевой интерфейсной карте (NIC) на PC-B?
+```
+Адрес не назначен.
+```
+b.	Активируйте IPv6-маршрутизацию на R1 с помощью команды IPv6 unicast-routing.
+```
+R1(config)#ipv6 unicast-routing
+
+R1#show ipv6 int
+GigabitEthernet0/0/0 is up, line protocol is up
+  IPv6 is enabled, link-local address is FE80::1
+  No Virtual link-local address(es):
+  Global unicast address(es):
+    2001:DB8:ACAD:A::1, subnet is 2001:DB8:ACAD:A::/64
+  Joined group address(es):
+    FF02::1
+    FF02::2
+    FF02::1:FF00:1
+```    
+c.	Теперь, когда R1 входит в группу многоадресной рассылки всех маршрутизаторов, еще раз введите команду ipconfig на PC-B. Проверьте данные IPv6-адреса.
+```
+C:\>ipconfig
+
+FastEthernet0 Connection:(default port)
+
+   Connection-specific DNS Suffix..: 
+   Link-local IPv6 Address.........: FE80::2D0:BAFF:FE65:588B
+   IPv6 Address....................: 2001:DB8:ACAD:A:2D0:BAFF:FE65:588B
+   IPv4 Address....................: 0.0.0.0
+   Subnet Mask.....................: 0.0.0.0
+   Default Gateway.................: FE80::1
+                                     0.0.0.0
+```
+Вопрос:
+Почему PC-B получил глобальный префикс маршрутизации и идентификатор подсети, которые вы настроили на R1?
+```
+РС-B получил свой IPv6 адрес по методу SLAAC на основе RA сообщения от R1, при этом префикс (глобальный префикс+идентификатор подсети) используется из сообщения RA, идентификатор интерфейса генерируется в PC-B. 
+```
+#### Шаг 3. Назначьте IPv6-адреса интерфейсу управления (SVI) на S1.
+a.	Назначьте адрес IPv6 для S1. Также назначьте этому интерфейсу локальный адрес канала.
+```
+S1#conf t
+S1(config)#int vlan1
+S1(config-if)#ipv6 address 2001:db8:acad:1::b/64
+S1(config-if)#no shutdown
+S1(config-if)#end
+```
+b.	Проверьте правильность назначения IPv6-адресов интерфейсу управления с помощью команды show ipv6 interface vlan1.
+```
+S1#show ipv6 int vlan 1
+Vlan1 is up, line protocol is up
+  IPv6 is enabled, link-local address is FE80::20A:F3FF:FE96:347
+  No Virtual link-local address(es):
+  Global unicast address(es):
+    2001:DB8:ACAD:1::B, subnet is 2001:DB8:ACAD:1::/64
+  Joined group address(es):
+    FF02::1
+    FF02::1:FF00:B
+    FF02::1:FF96:347
+```
+#### Шаг 4. Назначьте компьютерам статические IPv6-адреса.
+a.	Откройте окно Свойства Ethernet для каждого ПК и назначьте адресацию IPv6.
+![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ2/IP%20PC-A.bmp)
+![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ2/IP%20PC-B.bmp)
+```
+C:\>ipconfig
+
+FastEthernet0 Connection:(default port)
+
+   Connection-specific DNS Suffix..: 
+   Link-local IPv6 Address.........: FE80::2D0:BAFF:FE65:588B
+   IPv6 Address....................: 2001:DB8:ACAD:A::3
+   IPv4 Address....................: 0.0.0.0
+   Subnet Mask.....................: 0.0.0.0
+   Default Gateway.................: FE80::1
+                                     0.0.0.0
+C:\>ipconfig
+
+FastEthernet0 Connection:(default port)
+
+   Connection-specific DNS Suffix..: 
+   Link-local IPv6 Address.........: FE80::201:96FF:FEE2:71C6
+   IPv6 Address....................: 2001:DB8:ACAD:1::3
+   IPv4 Address....................: 0.0.0.0
+   Subnet Mask.....................: 0.0.0.0
+   Default Gateway.................: FE80::1
+                                     0.0.0.0
+```
+b.	Убедитесь, что оба компьютера имеют правильную информацию адреса IPv6. Каждый компьютер должен иметь два глобальных адреса IPv6: один статический и один SLACC
 
 ![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ2/IP%20PC-A.bmp)
 ![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ2/IP%20PC-B.bmp)

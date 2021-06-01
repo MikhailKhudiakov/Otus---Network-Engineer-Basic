@@ -177,8 +177,8 @@ Vlan1 is up, line protocol is up
 ```
 #### Шаг 4. Назначьте компьютерам статические IPv6-адреса.
 a.	Откройте окно Свойства Ethernet для каждого ПК и назначьте адресацию IPv6.
-![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ2/IP%20PC-A.bmp)
-![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ2/IP%20PC-B.bmp)
+![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ4/%D0%A72%20%D1%88%D0%B0%D0%B3%204%D0%B0.bmp)
+![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ4/%D0%A72%20%D1%88%D0%B0%D0%B3%204%D0%B0.bmp)
 ```
 C:\>ipconfig
 

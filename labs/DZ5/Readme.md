@@ -160,5 +160,6 @@ R1#copy running-config startup-config
 a.	Запустите Tera Term с PC-A.
 
 b.	Установите SSH-подключение к R1. 
+
 ![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ5/ssh.bmp)
 

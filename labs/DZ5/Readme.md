@@ -110,3 +110,53 @@ Ping statistics for 192.168.1.1:
 Approximate round trip times in milli-seconds:
     Minimum = 0ms, Maximum = 0ms, Average = 0ms
 ```
+### Часть 2. Настройка маршрутизатора для доступа по протоколу SSH
+#### Шаг 1. Настройте аутентификацию устройств.
+При генерации ключа шифрования в качестве его части используются имя устройства и домен. Поэтому эти имена необходимо указать перед вводом команды crypto key.
+Откройте окно конфигурации
+a.	Задайте имя устройства.
+```
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname R1
+```
+b.	Задайте домен для устройства.
+```
+R1(config)#ip domain-name domain-name.com
+```
+#### Шаг 2. Создайте ключ шифрования с указанием его длины.
+```
+R1(config)#crypto key generate RSA
+The name for the keys will be: R1.domain-name.com
+Choose the size of the key modulus in the range of 360 to 2048 for your
+  General Purpose Keys. Choosing a key modulus greater than 512 may take
+  a few minutes.
+
+How many bits in the modulus [512]: 1024
+% Generating 1024 bit RSA keys, keys will be non-exportable...[OK]
+```
+#### Шаг 3. Создайте имя пользователя в локальной базе учетных записей.
+```
+R1(config)#username admin secret Adm1nP@55 
+*Mar 2 2:7:35.902: %SSH-5-ENABLED: SSH 1.99 has been enabled
+```
+#### Шаг 4. Активируйте протокол SSH на линиях VTY.
+a.	Активируйте протоколы Telnet и SSH на входящих линиях VTY с помощью команды transport input.
+```
+R1(config)#line vty 0 15
+R1(config-line)#transport input telnet
+R1(config-line)#transport input ssh
+```
+b.	Измените способ входа в систему таким образом, чтобы использовалась проверка пользователей по локальной базе учетных записей.
+```
+R1(config-line)#login local 
+R1(config-line)#exit
+```
+#### Шаг 5. Сохраните текущую конфигурацию в файл загрузочной конфигурации.
+```
+R1#copy running-config startup-config 
+```
+Шаг 6. Установите соединение с маршрутизатором по протоколу SSH.
+a.	Запустите Tera Term с PC-A.
+b.	Установите SSH-подключение к R1. Use the username admin and password Adm1nP@55. У вас должно получиться установить SSH-подключение к R1.
+

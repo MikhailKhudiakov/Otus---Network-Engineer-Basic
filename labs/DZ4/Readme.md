@@ -151,7 +151,8 @@ FastEthernet0 Connection:(default port)
 Вопрос:
 Почему PC-B получил глобальный префикс маршрутизации и идентификатор подсети, которые вы настроили на R1?
 ```
-РС-B получил свой IPv6 адрес по методу SLAAC на основе RA сообщения от R1, при этом префикс (глобальный префикс+идентификатор подсети) используется из сообщения RA, идентификатор интерфейса генерируется в PC-B. 
+РС-B получил свой IPv6 адрес по методу SLAAC на основе RA сообщения от R1, при этом 
+префикс (глобальный префикс+идентификатор подсети) используется из сообщения RA, идентификатор интерфейса генерируется в PC-B. 
 ```
 #### Шаг 3. Назначьте IPv6-адреса интерфейсу управления (SVI) на S1.
 a.	Назначьте адрес IPv6 для S1. Также назначьте этому интерфейсу локальный адрес канала.
@@ -179,6 +180,8 @@ Vlan1 is up, line protocol is up
 a.	Откройте окно Свойства Ethernet для каждого ПК и назначьте адресацию IPv6.
 ![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ4/%D0%A72%20%D1%88%D0%B0%D0%B3%204%D0%B0-2.bmp)
 ![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ4/%D0%A72%20%D1%88%D0%B0%D0%B3%204%D0%B0.bmp)
+
+b.	Убедитесь, что оба компьютера имеют правильную информацию адреса IPv6. Каждый компьютер должен иметь два глобальных адреса IPv6: один статический и один SLACC
 ```
 C:\>ipconfig
 
@@ -203,22 +206,91 @@ FastEthernet0 Connection:(default port)
    Default Gateway.................: FE80::1
                                      0.0.0.0
 ```
-b.	Убедитесь, что оба компьютера имеют правильную информацию адреса IPv6. Каждый компьютер должен иметь два глобальных адреса IPv6: один статический и один SLACC
+### Часть 3. Проверка сквозного подключения
+С PC-A отправьте эхо-запрос на FE80::1. Это локальный адрес канала, назначенный G0/1 на R1.
+```
+C:\>ping FE80::1
 
-![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ2/IP%20PC-A.bmp)
-![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ2/IP%20PC-B.bmp)
-#### Шаг 3.Выполните инициализацию и перезагрузку коммутаторов.
-````Switch>enable
-Switch#show flash
-Directory of flash:/
+Pinging FE80::1 with 32 bytes of data:
 
-    1  -rw-     4670455          <no date>  2960-lanbasek9-mz.150-2.SE4.bin
+Reply from FE80::1: bytes=32 time<1ms TTL=255
+Reply from FE80::1: bytes=32 time<1ms TTL=255
+Reply from FE80::1: bytes=32 time<1ms TTL=255
+Reply from FE80::1: bytes=32 time<1ms TTL=255
 
-64016384 bytes total (59345929 bytes free)
-Switch#erase startup-config
-Erasing the nvram filesystem will remove all configuration files! Continue? [confirm]
-[OK]
-Erase of nvram: complete
-%SYS-7-NV_BLOCK_INIT: Initialized the geometry of nvram
-Switch#reload
-````
+Ping statistics for FE80::1:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+```
+Отправьте эхо-запрос на интерфейс управления S1 с PC-A.
+```
+C:\>ping 2001:db8:acad:1::b
+
+Pinging 2001:db8:acad:1::b with 32 bytes of data:
+
+Reply from 2001:DB8:ACAD:1::B: bytes=32 time<1ms TTL=255
+Reply from 2001:DB8:ACAD:1::B: bytes=32 time<1ms TTL=255
+Reply from 2001:DB8:ACAD:1::B: bytes=32 time<1ms TTL=255
+Reply from 2001:DB8:ACAD:1::B: bytes=32 time<1ms TTL=255
+
+Ping statistics for 2001:DB8:ACAD:1::B:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+```
+Введите команду tracert на PC-A, чтобы проверить наличие сквозного подключения к PC-B.
+```
+C:\>tracert 2001:db8:acad:a::3
+
+Tracing route to 2001:db8:acad:a::3 over a maximum of 30 hops: 
+
+  1   0 ms      0 ms      0 ms      2001:DB8:ACAD:1::1
+  2   0 ms      1 ms      1 ms      2001:DB8:ACAD:A::3
+
+Trace complete.
+```
+С PC-B отправьте эхо-запрос на PC-A.
+```
+C:\>ping 2001:DB8:ACAD:1::1
+
+Pinging 2001:DB8:ACAD:1::1 with 32 bytes of data:
+
+Reply from 2001:DB8:ACAD:1::1: bytes=32 time<1ms TTL=255
+Reply from 2001:DB8:ACAD:1::1: bytes=32 time<1ms TTL=255
+Reply from 2001:DB8:ACAD:1::1: bytes=32 time<1ms TTL=255
+Reply from 2001:DB8:ACAD:1::1: bytes=32 time<1ms TTL=255
+
+Ping statistics for 2001:DB8:ACAD:1::1:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+```
+С PC-B отправьте эхо-запрос на локальный адрес канала G0/0 на R1.
+```
+C:\>ping fe80::1
+
+Pinging fe80::1 with 32 bytes of data:
+
+Reply from FE80::1: bytes=32 time<1ms TTL=255
+Reply from FE80::1: bytes=32 time<1ms TTL=255
+Reply from FE80::1: bytes=32 time<1ms TTL=255
+Reply from FE80::1: bytes=32 time<1ms TTL=255
+
+Ping statistics for FE80::1:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+```
+#### Вопросы для повторения
+1.	Почему обоим интерфейсам Ethernet на R1 можно назначить один и тот же локальный адрес канала — FE80::1?
+```
+Область использования локального адреса ограничена одним каналом, глобальная маршрутизация по этому адресу не может быть выполнена, поэтому одинаковый локальный адрес может быть присвоен всем интерфейсам маршрутизатора.
+```
+2.	Какой идентификатор подсети в индивидуальном IPv6-адресе 2001:db8:acad::aaaa:1234/64?
+```
+2001:0db8:acad:0000:0000:0000:aaaa:1234	        
+Префикс глобальной маршрутизации:2001:0db8:acad
+Идентификатор подсети: 0000
+Идентификатор интерфейса:0000:0000:aaaa:1234
+```

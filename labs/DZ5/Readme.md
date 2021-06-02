@@ -72,7 +72,7 @@ Router#
 Router#conf t
 Router(config)#service password-encryption
 Router(config)#no ip domain-lookup
-Router(config)#banner motd @ Unauthorized access is strictly prohibited @
+Router(config)#banner motd @ Autorize personel only @
 ```
 i.	Настройте и активируйте на маршрутизаторе интерфейс G0/0/1, используя информацию, приведенную в таблице адресации.
 ```

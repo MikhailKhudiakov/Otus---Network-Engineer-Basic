@@ -167,16 +167,64 @@ b.	Установите SSH-подключение к R1.
 #### Шаг 1. Настройте основные параметры коммутатора.
 Откройте окно конфигурации
 a.	Подключитесь к коммутатору с помощью консольного подключения и активируйте привилегированный режим EXEC.
+```
+Switch>enable
+```
 b.	Войдите в режим конфигурации.
+```
+Switch#configure terminal 
+Enter configuration commands, one per line.  End with CNTL/Z.
+```
 c.	Отключите поиск DNS, чтобы предотвратить попытки маршрутизатора неверно преобразовывать введенные команды таким образом, как будто они являются именами узлов.
+```
+Switch(config)#no ip domain-lookup 
+```
 d.	Назначьте class в качестве зашифрованного пароля привилегированного режима EXEC.
+```
+Switch(config)#enable secret class
+```
 e.	Назначьте cisco в качестве пароля консоли и включите вход в систему по паролю.
+```
+Switch(config)#line console 0
+Switch(config-line)#password cisco
+Switch(config-line)#login 
+Switch(config-line)#exit
+```
 f.	Назначьте cisco в качестве пароля VTY и включите вход в систему по паролю.
+```
+Switch(config)#line vty 0 15
+Switch(config-line)#password cisco
+Switch(config-line)#login
+Switch(config-line)#exit
+```
 g.	Зашифруйте открытые пароли.
+```
+Switch(config)#service password-encryption 
+```
 h.	Создайте баннер, который предупреждает о запрете несанкционированного доступа.
+```
+Switch(config)#banner motd ^ Authorized Access Only!^
+```
 i.	Настройте и активируйте на коммутаторе интерфейс VLAN 1, используя информацию, приведенную в таблице адресации.
+ ```
+Switch(config)#int vlan1
+Switch(config-if)#ip address 192.168.1.11 255.255.255.0
+Switch(config-if)#no shutdown
+%LINK-5-CHANGED: Interface Vlan1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
+%IP-4-DUPADDR: Duplicate address 192.168.1.11 on Vlan1, sourced by 0001.97B2.973C
+
+Switch(config)#ip default-gateway 192.168.1.1
+```
 j.	Сохраните текущую конфигурацию в файл загрузочной конфигурации.
-Шаг 2. Настройте коммутатор для соединения по протоколу SSH.
+```
+Switch#copy running-config startup-config 
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+```
+### Шаг 2. Настройте коммутатор для соединения по протоколу SSH.
 Для настройки протокола SSH на коммутаторе используйте те же команды, которые применялись для аналогичной настройки маршрутизатора в части 2.
 a.	Настройте имя устройства, как указано в таблице адресации.
 b.	Задайте домен для устройства.

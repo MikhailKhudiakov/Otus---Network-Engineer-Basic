@@ -225,13 +225,41 @@ Building configuration...
 [OK]
 ```
 ### Шаг 2. Настройте коммутатор для соединения по протоколу SSH.
-Для настройки протокола SSH на коммутаторе используйте те же команды, которые применялись для аналогичной настройки маршрутизатора в части 2.
 a.	Настройте имя устройства, как указано в таблице адресации.
+```
+Switch(config)#hostname S1
+```
 b.	Задайте домен для устройства.
+```
+S1(config)#ip domain-name domain-name.com
+```
 c.	Создайте ключ шифрования с указанием его длины.
+```
+S1(config)#crypto key generate rsa
+The name for the keys will be: S1.domain-name.com
+Choose the size of the key modulus in the range of 360 to 2048 for your
+  General Purpose Keys. Choosing a key modulus greater than 512 may take
+  a few minutes.
+
+How many bits in the modulus [512]: 1024
+% Generating 1024 bit RSA keys, keys will be non-exportable...[OK]
+
+```
 d.	Создайте имя пользователя в локальной базе учетных записей.
+```
+S1(config)#username admin secret Adm1nP@55
+*Mar 1 0:29:48.346: %SSH-5-ENABLED: SSH 1.99 has been enabled
+```
 e.	Активируйте протоколы Telnet и SSH на линиях VTY.
+```
+S1(config)#line vty 0 15
+S1(config-line)#transport input telnet
+S1(config-line)#transport input ssh
+```
 f.	Измените способ входа в систему таким образом, чтобы использовалась проверка пользователей по локальной базе учетных записей.
+```
+S1(config-line)#login local
+```
 Шаг 3. Установите соединение с коммутатором по протоколу SSH.
 Запустите программу Tera Term на PC-A, затем установите подключение по протоколу SSH к интерфейсу SVI коммутатора S1.
 Вопрос:

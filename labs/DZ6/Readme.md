@@ -121,3 +121,92 @@ i.	Сохранение текущей конфигурации в качест�
     
     
 #### Шаг 4. Настройте узлы ПК.
+
+### Часть 2. Создание сетей VLAN и назначение портов коммутатора
+#### Шаг 1. Создайте сети VLAN на коммутаторах.  
+a.	Создайте и назовите необходимые VLAN на каждом коммутаторе из таблицы выше.  
+
+    S1>en
+    Password:   
+    S1#configure terminal   
+    Enter configuration commands, one per line.  End with CNTL/Z.  
+    S1(config)#vlan 10  
+    S1(config-vlan)#name Managment  
+    S1(config-vlan)#end  
+
+    S1#configure terminal   
+    Enter configuration commands, one per line.  End with CNTL/Z.  
+    S1(config)#vlan 20    
+    S1(config-vlan)#name Sales  
+
+    S1#conf t  
+    Enter configuration commands, one per line.  End with CNTL/Z.  
+    S1(config)#vlan 30  
+    S1(config-vlan)#name Operations  
+    S1(config-vlan)#end  
+
+    S1#conf t  
+    Enter configuration commands, one per line.  End with CNTL/Z.  
+    S1(config)#vlan 999  
+    S1(config-vlan)#name Parking_Lot  
+    S1(config-vlan)#end  
+  
+  
+    S2>en  
+    Password:   
+    S2#conf t  
+    Enter configuration commands, one per line.  End with CNTL/Z.  
+    S2(config)#vlan 10  
+    S2(config-vlan)#name Managment  
+    S2(config-vlan)#^Z  
+    S2#  
+    %SYS-5-CONFIG_I: Configured from console by console  
+
+    S2#conf t  
+    Enter configuration commands, one per line.  End with CNTL/Z.  
+    S2(config)#vlan 20  
+    S2(config-vlan)#name Sales  
+    S2(config-vlan)#^Z  
+    S2#  
+    %SYS-5-CONFIG_I: Configured from console by console  
+
+    S2#conf t  
+    Enter configuration commands, one per line.  End with CNTL/Z.  
+    S2(config)#vlan 30   
+    S2(config-vlan)#name Operations  
+    S2(config-vlan)#^Z  
+    S2#  
+    %SYS-5-CONFIG_I: Configured from console by console  
+
+    S2#conf t  
+    Enter configuration commands, one per line.  End with CNTL/Z.  
+    S2(config)#vlan 999  
+    S2(config-vlan)#name Parking_Lot  
+    S2(config-vlan)#^Z  
+ 
+ 
+ 
+ 
+b.	Настройте интерфейс управления и шлюз по умолчанию на каждом коммутаторе, используя информацию об IP-адресе в таблице адресации.   
+    
+    S1>en  
+    Password:   
+    S1#conf t  
+    Enter configuration commands, one per line.  End with CNTL/Z.  
+    S1(config)#int vlan10  
+    S1(config-if)#  
+    %LINK-5-CHANGED: Interface Vlan10, changed state to up  
+
+    S1(config-if)#ip address 192.168.10.11 255.255.255.0  
+    S1(config-if)#no shutdown   
+
+    S1(config)#ip default-gateway 192.168.10.1  
+    
+    
+    
+c.	Назначьте все неиспользуемые порты коммутатора VLAN Parking_Lot, настройте их для статического режима доступа и административно деактивируйте их.    
+Примечание. Команда interface range полезна для выполнения этой задачи с минимальным количеством команд.  
+#### Шаг 2. Назначьте сети VLAN соответствующим интерфейсам коммутатора.  
+a.	Назначьте используемые порты соответствующей VLAN (указанной в таблице VLAN выше) и настройте их для режима статического доступа.  
+b.	Убедитесь, что VLAN назначены на правильные интерфейсы.  
+

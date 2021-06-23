@@ -377,4 +377,29 @@ b.	Убедитесь, что VLAN назначены на правильные 
                                                 Fa0/14, Fa0/15, Fa0/16, Fa0/17
                                                 Fa0/19, Fa0/20, Fa0/21, Fa0/22
                                                 Fa0/23, Fa0/24, Gig0/1, Gig0/                                          
+#### Часть 3. Конфигурация магистрального канала стандарта 802.1Q между коммутаторами
+
+### Шаг 1. Вручную настройте магистральный интерфейс F0/1 на коммутаторах S1 и S2.
+a.	Настройка статического транкинга на интерфейсе F0/1 для обоих коммутаторов.
+    
+    S1(config)#interface fa0/1  
+    S1(config-if)#switchport mode trunk  
+    S1(config-if)#    
+    %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to down
+
+    %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up
+
+    %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan10, changed state to up   
+    S1(config-if)#end  
+    
+    
+b.	Установите native VLAN 1000 на обоих коммутаторах.
+c.	Укажите, что VLAN 10, 20, 30 и 1000 могут проходить по транку.
+d.	Проверьте транки, native VLAN и разрешенные VLAN через транк.
+Шаг 2. Вручную настройте магистральный интерфейс F0/5 на коммутаторе S1.
+a.	Настройте интерфейс S1 F0/5 с теми же параметрами транка, что и F0/1. Это транк до маршрутизатора.
+b.	Сохраните текущую конфигурацию в файл загрузочной конфигурации.
+c.	Проверка транкинга.
+Вопрос:
+Что произойдет, если G0/0/1 на R1 будет отключен?
 

@@ -45,24 +45,24 @@ VLAN|Имя|Назначенный интерфейс|
   j.	Сохраните текущую конфигурацию в файл загрузочной конфигурации.  
   k.	Настройте на маршрутизаторе время.  
   `
-  Router>enable  
-  Router#configure terminal 
-  Router(config)#hostname R1 
-  R1(config)#no ip domain-lookup 
-  R1(config)#enable secret class 
-  R1(config)#line console 0 
-  R1(config-line)#password cisco 
-  R1(config-line)#login 
-  R1(config-line)#exit 
-  R1(config)#line vty 0 15 
-  R1(config-line)#password cisco 
-  R1(config-line)#login 
-  R1(config-line)#exit 
-  R1(config)#service password-encryption  
-  R1(config)#banner motd ^Authorized Access Only^ 
-  R1#copy running-config startup-config  
-  R1#clock set 19:00:00 10 june 2021 
-  
+  Router>enable    
+  Router#configure terminal   
+  Router(config)#hostname R1   
+  R1(config)#no ip domain-lookup   
+  R1(config)#enable secret class   
+  R1(config)#line console 0   
+  R1(config-line)#password cisco   
+  R1(config-line)#login   
+  R1(config-line)#exit   
+  R1(config)#line vty 0 15   
+  R1(config-line)#password cisco   
+  R1(config-line)#login   
+  R1(config-line)#exit   
+  R1(config)#service password-encryption    
+  R1(config)#banner motd ^Authorized Access Only^   
+  R1#copy running-config startup-config    
+  R1#clock set 19:00:00 10 june 2021   
+  `
 #### Шаг 3. Настройте базовые параметры каждого коммутатора.
 a.	Присвойте коммутатору имя устройства.  
 b.	Отключите поиск DNS, чтобы предотвратить попытки маршрутизатора неверно преобразовывать введенные команды таким образом, как будто они являются именами узлов.  

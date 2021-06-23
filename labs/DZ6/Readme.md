@@ -44,25 +44,26 @@ VLAN|Имя|Назначенный интерфейс|
   i.	Создайте баннер с предупреждением о запрете несанкционированного доступа к устройству.  
   j.	Сохраните текущую конфигурацию в файл загрузочной конфигурации.  
   k.	Настройте на маршрутизаторе время.  
-  `
-  Router>enable    
-  Router#configure terminal   
-  Router(config)#hostname R1   
-  R1(config)#no ip domain-lookup   
-  R1(config)#enable secret class   
-  R1(config)#line console 0   
-  R1(config-line)#password cisco   
-  R1(config-line)#login   
-  R1(config-line)#exit   
-  R1(config)#line vty 0 15   
-  R1(config-line)#password cisco   
-  R1(config-line)#login   
-  R1(config-line)#exit   
-  R1(config)#service password-encryption    
-  R1(config)#banner motd ^Authorized Access Only^   
-  R1#copy running-config startup-config    
-  R1#clock set 19:00:00 10 june 2021   
-  `
+  
+        Router>enable  
+        Router#configure terminal
+        Router(config)#hostname R1 
+        R1(config)#no ip domain-lookup  
+        R1(config)#enable secret class 
+        R1(config)#line console 0   
+        R1(config-line)#password cisco   
+        R1(config-line)#login   
+        R1(config-line)#exit   
+        R1(config)#line vty 0 15   
+        R1(config-line)#password cisco   
+        R1(config-line)#login   
+        R1(config-line)#exit   
+        R1(config)#service password-encryption    
+        R1(config)#banner motd ^Authorized Access Only^   
+        R1#copy running-config startup-config    
+        R1#clock set 19:00:00 10 june 2021   
+    
+  
 #### Шаг 3. Настройте базовые параметры каждого коммутатора.
 a.	Присвойте коммутатору имя устройства.  
 b.	Отключите поиск DNS, чтобы предотвратить попытки маршрутизатора неверно преобразовывать введенные команды таким образом, как будто они являются именами узлов.  
@@ -73,4 +74,50 @@ f.	Зашифруйте открытые пароли.
 g.	Создайте баннер с предупреждением о запрете несанкционированного доступа к устройству.  
 h.	Настройте на коммутаторах время.  
 i.	Сохранение текущей конфигурации в качестве начальной.  
+  
+    Switch>enable  
+    Switch#configure terminal  
+    Enter configuration commands, one per line.  End with CNTL/Z.   
+    Switch(config)#hostname S1    
+    S1(config)#no ip domain-lookup  
+    S1(config)#enable secret class  
+    S1(config)#line console 0  
+    S1(config-line)#password cisco  
+    S1(config-line)#login  
+    S1(config-line)#exit  
+    S1(config)#line vty 0 15  
+    S1(config-line)#password cisco  
+    S1(config-line)#login  
+    S1(config-line)#exit  
+    S1(config)#service password-encryption  
+    S1(config)#banner motd ^Autorized Access Only^  
+    S1#  
+    %SYS-5-CONFIG_I: Configured from console by console  
+    S1#copy running-config startup-config   
+    S1#clock set 19:00:00 10 june 2021  
+    
+    
+    Switch>enable
+    Switch#configure terminal 
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    Switch(config)#hostname S2
+    S2(config)#no ip domain-lookup
+    S2(config)#enable secret class
+    S2(config)#line console 0
+    S2(config-line)#password cisco
+    S2(config-line)#login
+    S2(config-line)#exit
+    S2(config)#line vty 0 15
+    S2(config-line)#password cisco
+    S2(config-line)#login
+    S2(config-line)#exit
+    S2(config)#service password-encryption 
+    S2(config)#banner motd ^Autorized Access Only^
+    S2(config)#^Z
+    S2#
+    %SYS-5-CONFIG_I: Configured from console by console
+    S2#clock set 19:00:00 10 june 2021
+    S2#copy running-config startup-config 
+    
+    
 #### Шаг 4. Настройте узлы ПК.

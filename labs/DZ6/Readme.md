@@ -331,10 +331,50 @@ c.	Назначьте все неиспользуемые порты комму�
     %LINK-5-CHANGED: Interface GigabitEthernet0/2, changed state to administratively down
     S2(config-if-range)#end
    
+    #### Шаг 2. Назначьте сети VLAN соответствующим интерфейсам коммутатора.  
+a.	Назначьте используемые порты соответствующей VLAN (указанной в таблице VLAN выше) и настройте их для режима статического доступа. 
     
+    S1#conf t  
+    Enter configuration commands, one per line.  End with CNTL/Z.  
+    S1(config)#int f0/6  
+    S1(config-if)#switchport mode access   
+    S1(config-if)#switchport access vlan 20  
+    S1(config-if)#end  
     
+    S2#conf t  
+    Enter configuration commands, one per line.  End with CNTL/Z.  
+    S2(config)#interface f0/18  
+    S2(config-if)#switchport mode access   
+    S2(config-if)#switchport access vlan 30  
+    S2(config-if)#end  
     
-#### Шаг 2. Назначьте сети VLAN соответствующим интерфейсам коммутатора.  
-a.	Назначьте используемые порты соответствующей VLAN (указанной в таблице VLAN выше) и настройте их для режима статического доступа.  
-b.	Убедитесь, что VLAN назначены на правильные интерфейсы.  
+b.	Убедитесь, что VLAN назначены на правильные интерфейсы.
+    
+    S1#show vlan
+    VLAN Name                             Status    Ports
+    ---- -------------------------------- --------- -------------------------------
+    1    default                          active    Fa0/1, Fa0/5
+    10   Managment                        active    
+    20   Sales                            active    Fa0/6
+    30   Operations                       active    
+    999  Parking_Lot                      active    Fa0/2, Fa0/3, Fa0/4, Fa0/7
+                                                Fa0/8, Fa0/9, Fa0/10, Fa0/11
+                                                Fa0/12, Fa0/13, Fa0/14, Fa0/15
+                                                Fa0/16, Fa0/17, Fa0/18, Fa0/19
+                                                Fa0/20, Fa0/21, Fa0/22, Fa0/23
+                                                Fa0/24, Gig0/1, Gig0/2
+                                                
+    S2#show vlan
+    VLAN Name                             Status    Ports
+    ---- -------------------------------- --------- -------------------------------
+    1    default                          active    Fa0/1
+    10   Managment                        active    
+    20   Sales                            active    
+    30   Operations                       active    Fa0/18
+    999  Parking_Lot                      active    Fa0/2, Fa0/3, Fa0/4, Fa0/5
+                                                Fa0/6, Fa0/7, Fa0/8, Fa0/9
+                                                Fa0/10, Fa0/11, Fa0/12, Fa0/13
+                                                Fa0/14, Fa0/15, Fa0/16, Fa0/17
+                                                Fa0/19, Fa0/20, Fa0/21, Fa0/22
+                                                Fa0/23, Fa0/24, Gig0/1, Gig0/                                          
 

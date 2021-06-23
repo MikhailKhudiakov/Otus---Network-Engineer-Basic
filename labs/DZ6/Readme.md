@@ -203,9 +203,79 @@ b.	Настройте интерфейс управления и шлюз по �
     S1(config)#ip default-gateway 192.168.10.1  
     
     
+    S2>en
+    Password: 
+    S2#conf t
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    S2(config)#interface vlan10
+    S2(config-if)#
+    %LINK-5-CHANGED: Interface Vlan10, changed state to up
+
+    S2(config-if)#ip address 192.168.10.12 255.255.255.0
+    S2(config-if)#no shutdown 
+    S2(config-if)#end
+
+    S2(config)#ip default-gateway 192.168.10.1
+
+    
     
 c.	Назначьте все неиспользуемые порты коммутатора VLAN Parking_Lot, настройте их для статического режима доступа и административно деактивируйте их.    
-Примечание. Команда interface range полезна для выполнения этой задачи с минимальным количеством команд.  
+     
+    S1#conf t  
+    Enter configuration commands, one per line.  End with CNTL/Z.  
+    S1(config)#interface range f0/2-4,f0/7-24,g0/1-2  
+    S1(config-if-range)#switchport mode access   
+    S1(config-if-range)#switchport access vlan 999  
+    S1(config-if-range)#shutdown   
+
+    %LINK-5-CHANGED: Interface FastEthernet0/2, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/3, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/4, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/7, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/8, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/9, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/10, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/11, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/12, changed state to administratively down
+  
+    %LINK-5-CHANGED: Interface FastEthernet0/13, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/14, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/15, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/16, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/17, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/18, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/19, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/20, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/21, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/22, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/23, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface FastEthernet0/24, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to administratively down
+
+    %LINK-5-CHANGED: Interface GigabitEthernet0/2, changed state to administratively down
+    S1(config-if-range)#end  
+    
+    
 #### Шаг 2. Назначьте сети VLAN соответствующим интерфейсам коммутатора.  
 a.	Назначьте используемые порты соответствующей VLAN (указанной в таблице VLAN выше) и настройте их для режима статического доступа.  
 b.	Убедитесь, что VLAN назначены на правильные интерфейсы.  

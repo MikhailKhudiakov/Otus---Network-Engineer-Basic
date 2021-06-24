@@ -419,14 +419,58 @@ b.	Установите native VLAN 1000 на обоих коммутатора�
   
   
 c.	Укажите, что VLAN 10, 20, 30 и 1000 могут проходить по транку.  
-
+    
+    S1(config)#int fa0/1  
+    S1(config-if)#switchport trunk allowed vlan 10,20,30,1000  
+    S1(config-if)#end  
+    
+    S2(config)#int fa0/1  
+    S2(config-if)#switchport trunk allowed vlan 10,20,30,1000  
+    S2(config-if)#end  
+    
 d.	Проверьте транки, native VLAN и разрешенные VLAN через транк.
+    
+    S1#show interfaces fa0/1 switchport   
+    Name: Fa0/1  
+    Switchport: Enabled  
+    Administrative Mode: trunk  
+    Operational Mode: trunk  
+    Administrative Trunking Encapsulation: dot1q  
+    Operational Trunking Encapsulation: dot1q  
+    Negotiation of Trunking: Off  
+    Access Mode VLAN: 1 (default)  
+    Trunking Native Mode VLAN: 1000 (VLAN1000)  
+    Voice VLAN: none  
+    Administrative private-vlan host-association: none  
+    Administrative private-vlan mapping: none  
+    Administrative private-vlan trunk native VLAN: none  
+    Administrative private-vlan trunk encapsulation: dot1q  
+    Administrative private-vlan trunk normal VLANs: none  
+    Administrative private-vlan trunk private VLANs: none  
+    Operational private-vlan: none  
+    Trunking VLANs Enabled: 10,20,30,1000  
+    Pruning VLANs Enabled: 2-1001  
+    Capture Mode Disabled  
+    Capture VLANs Allowed: ALL  
+    Protected: false  
+    Unknown unicast blocked: disabled  
+    Unknown multicast blocked: disabled  
+    Appliance trust: none  
 
 ### Шаг 2. Вручную настройте магистральный интерфейс F0/5 на коммутаторе S1.  
 a.	Настройте интерфейс S1 F0/5 с теми же параметрами транка, что и F0/1. Это транк до маршрутизатора.
-
+      
+      S1(config)#interface fa0/5  
+      S1(config-if)#switchport mode trunk  
+      S1(config-if)#switchport trunk native vlan 1000  
+      S1(config-if)#switchport trunk allowed vlan 10,20,30,1000  
+      S1(config-if)#end 
+      
 b.	Сохраните текущую конфигурацию в файл загрузочной конфигурации.
-
+      
+      S1#copy running-config startup-config  
+      S2#copy running-config startup-config
+      
 c.	Проверка транкинга.
 
 Вопрос:

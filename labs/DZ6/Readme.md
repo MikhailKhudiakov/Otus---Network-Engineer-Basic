@@ -472,7 +472,21 @@ b.	Сохраните текущую конфигурацию в файл заг
       S2#copy running-config startup-config
       
 c.	Проверка транкинга.
+    
+    S1#show interfaces trunk   
+    Port        Mode         Encapsulation  Status        Native vlan  
+    Fa0/1       on           802.1q         trunking      1000  
+
+    Port        Vlans allowed on trunk  
+    Fa0/1       10,20,30,1000  
+
+    Port        Vlans allowed and active in management domain  
+    Fa0/1       10,20,30,1000  
+
+    Port        Vlans in spanning tree forwarding state and not pruned  
+    Fa0/1       10,20,30,1000  
+
 
 Вопрос:
 Что произойдет, если G0/0/1 на R1 будет отключен?
-
+`Если G0/0/1 будет отключен, шлюз по умолчанию для S1, S2, РС-А, РС-В будет недоступен,

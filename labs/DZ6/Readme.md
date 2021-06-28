@@ -490,4 +490,94 @@ c.	Проверка транкинга.
 
 Вопрос:
 Что произойдет, если G0/0/1 на R1 будет отключен?  
-`Если G0/0/1 будет отключен, шлюз по умолчанию для S1, S2, РС-А, РС-В будет недоступен,`
+` 1)До тех пор пока G0/0/1 будет отключен, интерфейс S1 Fa0/5 отображается в сети VLAN1 и не переходит в режим работы trunk.
+  2)Если G0/0/1 будет отключен, шлюз по умолчанию для S1, S2, РС-А, РС-В будет недоступен.`
+ 
+
+### Часть 4. Настройка маршрутизации между сетями VLAN
+#### Шаг 1. Настройте маршрутизатор.
+
+a.	При необходимости активируйте интерфейс G0/0/1 на маршрутизаторе. 
+
+  `
+  R1#conf t  
+  Enter configuration commands, one per line.  End with CNTL/Z.  
+  R1(config)#int g0/0/1  
+  R1(config-if)#no shutdown  
+  ` 
+  
+b.	Настройте подинтерфейсы для каждой VLAN, как указано в таблице IP-адресации. Все подинтерфейсы используют инкапсуляцию 802.1Q. Убедитесь, что подинтерфейсу для native VLAN не назначен IP-адрес. Включите описание для каждого подинтерфейса.
+
+ `
+  R1(config)#int g0/0/1.10 
+  R1(config-subif)# 
+  %LINK-5-CHANGED: Interface GigabitEthernet0/0/1.10, changed state to up 
+  
+  %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1.10, changed state to up 
+  R1(config-subif)#description Managment 
+  R1(config-subif)#encapsulation dot1Q 10 
+  R1(config-subif)#ip address 192.168.10.1 255.255.255.0 
+  R1(config-subif)#exit 
+  
+  
+  R1(config)#int g0/0/1.20 
+  R1(config-subif)# 
+  %LINK-5-CHANGED: Interface GigabitEthernet0/0/1.20, changed state to up 
+
+  %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1.20, changed state to up 
+
+  R1(config-subif)#description Sales 
+  R1(config-subif)#encapsulation dot1Q 20 
+  R1(config-subif)#ip address 192.168.20.1 255.255.255.0 
+  R1(config-subif)#exit 
+  
+  
+  R1(config)#int g0/0/1.30 
+  R1(config-subif)# 
+  %LINK-5-CHANGED: Interface GigabitEthernet0/0/1.30, changed state to up 
+
+  %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1.30, changed state to up 
+
+  R1(config-subif)#description Operations 
+  R1(config-subif)#encapsulation dot1Q 30 
+  R1(config-subif)#ip address 192.168.30.1 255.255.255.0 
+  R1(config-subif)#exit 
+  
+  
+  R1(config)#int g0/0/1.1000 
+  R1(config-subif)# 
+  %LINK-5-CHANGED: Interface GigabitEthernet0/0/1.1000, changed state to up 
+
+  %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1.1000, changed state to up 
+
+  R1(config-subif)#encapsulation dot1Q 1000 
+  R1(config-subif)#description Native VLAN 
+  R1(config-subif)#exit 
+  
+  
+  R1#show int g0/0/1.1000 
+  GigabitEthernet0/0/1.1000 is up, line protocol is up (connected) 
+  Hardware is PQUICC_FEC, address is 0005.5ec4.e902 (bia 0005.5ec4.e902) 
+  MTU 1500 bytes, BW 100000 Kbit, DLY 100 usec,  
+     reliability 255/255, txload 1/255, rxload 1/255 
+  Encapsulation 802.1Q Virtual LAN, Vlan ID 1000 
+  ARP type: ARPA, ARP Timeout 04:00:00,  
+  Last clearing of "show interface" counters never 
+ `
+  
+c.	Убедитесь, что вспомогательные интерфейсы работают
+  `
+  R1#show ip int brief 
+  Interface              IP-Address      OK? Method Status                Protocol  
+  GigabitEthernet0/0/0   unassigned      YES unset  administratively down down  
+  GigabitEthernet0/0/1   unassigned      YES unset  up                    up  
+  GigabitEthernet0/0/1.10192.168.10.1    YES manual up                    up  
+  GigabitEthernet0/0/1.20192.168.20.1    YES manual up                    up  
+  GigabitEthernet0/0/1.30192.168.30.1    YES manual up                    up  
+  GigabitEthernet0/0/1.1000unassigned      YES unset  up                    up  
+  GigabitEthernet0/0/2   unassigned      YES unset  administratively down down  
+  Vlan1                  unassigned      YES unset  administratively down down 
+  `
+
+
+

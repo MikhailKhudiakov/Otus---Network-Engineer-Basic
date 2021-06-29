@@ -22,7 +22,7 @@ S3	| VLAN 1 |	192.168.1.3 |	255.255.255.0
 #### Шаг 1.Создайте сеть согласно топологии.  
 Подключите устройства, как показано в топологии, и подсоедините необходимые кабели.
 
- ![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ7/%D1%82%D0%BE%D0%BF%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%8F%20%D0%B4%D0%B77.bmp)  
+ ![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ7/%D1%82%D0%BE%D0%BF%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%8F%20%D0%A0%D0%A2%20%D0%B4%D0%B77.bmp)  
 #### Шаг 2.	Выполните инициализацию и перезагрузку коммутаторов.  
 #### Шаг 3.	Настройте базовые параметры каждого коммутатора.  
 a.	Отключите поиск DNS.  

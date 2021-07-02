@@ -61,6 +61,34 @@ h.	Скопируйте текущую конфигурацию в файл за
 	Building configuration...  
 	[OK]  
 	S1#  
+	
+	Switch>  
+	Switch>enable   
+	Switch#configure terminal   
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostname S2
+S2(config)#no ip domain-lookup 
+S2(config)#enable secret class
+S2(config)#line console 0
+S2(config-line)#password cisco
+S2(config-line)#logging synchronous 
+S2(config-line)#exit
+S2(config)#line vty 0 15
+S2(config-line)#password cisco
+S2(config-line)#login
+S2(config-line)#exit
+S2(config)#banner motd @Autorizaition Acceess Only@
+S2(config)#int vlan1
+S2(config-if)#ip address 192.168.1.2 255.255.255.0
+S2(config-if)#exit
+S2(config)#^Z
+S2#
+%SYS-5-CONFIG_I: Configured from console by console
+
+S2#copy running-config startup-config 
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
 
 #### Шаг 4:	Проверьте связь.  
 Проверьте способность компьютеров обмениваться эхо-запросами.  

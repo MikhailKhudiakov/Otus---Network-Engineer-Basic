@@ -89,6 +89,35 @@ h.	Скопируйте текущую конфигурацию в файл за
 	Destination filename [startup-config]?   
 	Building configuration...  
 	[OK]  
+	
+	Switch>  
+	Switch>enable   
+	Switch#conf terminal   
+	Enter configuration commands, one per line.  End with CNTL/Z.  
+	Switch(config)#hostname S3  
+	S3(config)#no ip domain-lookup  
+	S3(config)#enable secret class  
+	S3(config)#line console 0  
+	S3(config-line)#password cisco  
+	S3(config-line)#logging synchronous   
+	S3(config-line)#exit  
+	S3(config)#line vty 0 15  
+	S3(config-line)#password cisco  
+	S3(config-line)#login  
+	S3(config-line)#exit  
+	S3(config)#banner motd @Autorization Acceess Only@  
+	S3(config)#int vlan1  
+	S3(config-if)#ip address 192.168.1.3 255.255.255.0  
+	S3(config-if)#exit  
+	S3(config)#^Z  
+	S3#  
+	%SYS-5-CONFIG_I: Configured from console by console  
+
+	S3#copy running-config startup-config   
+	Destination filename [startup-config]?   
+	Building configuration...  
+	[OK]  
+	S3#  
 
 #### Шаг 4:	Проверьте связь.  
 Проверьте способность компьютеров обмениваться эхо-запросами.  

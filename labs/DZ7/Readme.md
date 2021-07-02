@@ -173,3 +173,156 @@ h.	Скопируйте текущую конфигурацию в файл за
 	Sending 5, 100-byte ICMP Echos to 192.168.1.3, timeout is 2 seconds:  
 	..!!!  
 	Success rate is 60 percent (3/5), round-trip min/avg/max = 0/0/0 ms  
+
+### Часть 2:	Определение корневого моста
+
+#### Шаг 1:	Отключите все порты на коммутаторах.
+	S1(config)#interface range fa0/1-24,g0/1-2  
+	S1(config-if-range)#shutdown   
+
+
+	%LINK-5-CHANGED: Interface FastEthernet0/5, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/6, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/7, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/8, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/9, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/10, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/11, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/12, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/13, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/14, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/15, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/16, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/17, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/18, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/19, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/20, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/21, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/22, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/23, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/24, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to administratively down
+
+	%LINK-5-CHANGED: Interface GigabitEthernet0/2, changed state to administratively down
+	S1(config-if-range)#
+	%LINK-5-CHANGED: Interface FastEthernet0/1, changed state to administratively down
+
+	%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/2, changed state to administratively down
+
+	%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/2, changed state to down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/3, changed state to administratively down
+
+	%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/3, changed state to down
+
+	%LINK-5-CHANGED: Interface FastEthernet0/4, changed state to administratively down
+
+	%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/4, changed state to down
+
+	%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to down
+
+	S1(config-if-range)#end
+	
+	
+	
+#### Шаг 2:	Настройте подключенные порты в качестве транковых.
+#### Шаг 3:	Включите порты F0/2 и F0/4 на всех коммутаторах.
+#### Шаг 4:	Отобразите данные протокола spanning-tree.
+Введите команду show spanning-tree на всех трех коммутаторах. Приоритет идентификатора моста рассчитывается путем сложения значений приоритета и расширенного идентификатора системы. Расширенным идентификатором системы всегда является номер сети VLAN. В примере ниже все три коммутатора имеют равные значения приоритета идентификатора моста (32769 = 32768 + 1, где приоритет по умолчанию = 32768, номер сети VLAN = 1); следовательно, коммутатор с самым низким значением MAC-адреса становится корневым мостом (в примере — S2).
+S1# show spanning-tree
+
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    32769
+             Address     0cd9.96d2.4000
+             Cost        19
+             Port        2 (FastEthernet0/2)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     0cd9.96e8.8a00
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Fa0/2               Root FWD 19        128.2    P2p 
+Fa0/4               Altn BLK 19        128.4    P2p
+
+S2# show spanning-tree
+
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    32769
+             Address     0cd9.96d2.4000
+             This bridge is the root
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     0cd9.96d2.4000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Fa0/2               Desg FWD 19        128.2    P2p 
+Fa0/4               Desg FWD 19        128.4    P2p
+
+S3# show spanning-tree
+
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    32769
+             Address     0cd9.96d2.4000
+             Cost        19
+             Port        2 (FastEthernet0/2)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     0cd9.96e8.7400
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Fa0/2               Root FWD 19        128.2    P2p 
+Fa0/4               Desg FWD 19        128.4    P2p
+
+Примечание. Режим STP по умолчанию на коммутаторе 2960 — протокол STP для каждой сети VLAN (PVST).
+В схему ниже запишите роль и состояние (Sts) активных портов на каждом коммутаторе в топологии.
+ 
+С учетом выходных данных, поступающих с коммутаторов, ответьте на следующие вопросы.
+Какой коммутатор является корневым мостом? ______________
+Почему этот коммутатор был выбран протоколом spanning-tree в качестве корневого моста?
+_______________________________________________________________________________________
+_______________________________________________________________________________________
+Какие порты на коммутаторе являются корневыми портами? ___________________________________
+Какие порты на коммутаторе являются назначенными портами? ________________________________
+Какой порт отображается в качестве альтернативного и в настоящее время заблокирован? ____________________________
+Почему протокол spanning-tree выбрал этот порт в качестве невыделенного (заблокированного) порта?
+_______________________________________________________________________________________
+_______________________________________________________________________________________
+_______________________________________________________________________________________
+_______________________________________________________________________________________

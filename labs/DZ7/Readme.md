@@ -33,6 +33,35 @@ e.	Настройте logging synchronous для консольного кана
 f.	Настройте баннерное сообщение дня (MOTD) для предупреждения пользователей о запрете несанкционированного доступа.  
 g.	Задайте IP-адрес, указанный в таблице адресации для VLAN 1 на всех коммутаторах.  
 h.	Скопируйте текущую конфигурацию в файл загрузочной конфигурации.  
+`
+	Switch>  
+	Switch>en  
+	Switch#configure terminal   
+	Enter configuration commands, one per line.  End with CNTL/Z.  
+	Switch(config)#hostname S1  
+	S1(config)#no ip domain-lookup  
+	S1(config)#enable secret class  
+	S1(config)#line console 0  
+	S1(config-line)#password cisco  
+	S1(config-line)#logging synchronous   
+	S1(config-line)#exit  
+	S1(config)#line vty 0 15  
+	S1(config-line)#password cisco  
+	S1(config-line)#login  
+	S1(config-line)#exit  
+	S1(config)#banner motd @Autorized Access Only@  
+	S1(config)#int vlan1  
+	S1(config-if)#ip address 192.168.1.1 255.255.255.0  
+	S1(config-if)#exit  
+	S1(config)#^Z  
+	S1#  
+
+	S1#copy running-config startup-config   
+	Destination filename [startup-config]?   
+	Building configuration...  
+	[OK]  
+	S1#  
+`
 #### Шаг 4:	Проверьте связь.  
 Проверьте способность компьютеров обмениваться эхо-запросами.  
 Успешно ли выполняется эхо-запрос от коммутатора S1 на коммутатор S2?	______________  

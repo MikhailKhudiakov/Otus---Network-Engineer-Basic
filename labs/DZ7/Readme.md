@@ -52,6 +52,12 @@ h.	Скопируйте текущую конфигурацию в файл за
 	S1(config)#banner motd @Autorized Access Only@  
 	S1(config)#int vlan1  
 	S1(config-if)#ip address 192.168.1.1 255.255.255.0  
+	S1(config-if)#no shutdown   
+
+	S1(config-if)#  
+	%LINK-5-CHANGED: Interface Vlan1, changed state to up  
+
+	%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up  
 	S1(config-if)#exit  
 	S1(config)#^Z  
 	S1#  
@@ -80,6 +86,14 @@ h.	Скопируйте текущую конфигурацию в файл за
 	S2(config)#banner motd @Autorizaition Acceess Only@  
 	S2(config)#int vlan1  
 	S2(config-if)#ip address 192.168.1.2 255.255.255.0  
+	S2(config-if)#no shutdown 
+	
+	S2(config-if)#  
+	%LINK-5-CHANGED: Interface Vlan1, changed state to up  
+
+	%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up  
+
+	S2(config-if)#  
 	S2(config-if)#exit  
 	S2(config)#^Z  
 	S2#  
@@ -108,6 +122,14 @@ h.	Скопируйте текущую конфигурацию в файл за
 	S3(config)#banner motd @Autorization Acceess Only@  
 	S3(config)#int vlan1  
 	S3(config-if)#ip address 192.168.1.3 255.255.255.0  
+	S3(config-if)#no shutdown 
+
+	S3(config-if)#  
+	%LINK-5-CHANGED: Interface Vlan1, changed state to up  
+
+	%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up  
+
+	S3(config-if)#  
 	S3(config-if)#exit  
 	S3(config)#^Z  
 	S3#  
@@ -121,7 +143,33 @@ h.	Скопируйте текущую конфигурацию в файл за
 
 #### Шаг 4:	Проверьте связь.  
 Проверьте способность компьютеров обмениваться эхо-запросами.  
-Успешно ли выполняется эхо-запрос от коммутатора S1 на коммутатор S2?	______________  
-Успешно ли выполняется эхо-запрос от коммутатора S1 на коммутатор S3?	______________  
-Успешно ли выполняется эхо-запрос от коммутатора S2 на коммутатор S3?	______________  
+Успешно ли выполняется эхо-запрос от коммутатора S1 на коммутатор S2?	______________
+	
+	Autorized Access Only  
 
+	S1>ping 192.168.1.2  
+
+	Type escape sequence to abort.  
+	Sending 5, 100-byte ICMP Echos to 192.168.1.2, timeout is 2 seconds:  
+	..!!!  
+	Success rate is 60 percent (3/5), round-trip min/avg/max = 0/0/0 ms  
+	
+Успешно ли выполняется эхо-запрос от коммутатора S1 на коммутатор S3?	______________  
+
+	S1>ping 192.168.1.3  
+
+	Type escape sequence to abort.  
+	Sending 5, 100-byte ICMP Echos to 192.168.1.3, timeout is 2 seconds:  
+	..!!!  
+	Success rate is 60 percent (3/5), round-trip min/avg/max = 0/0/0 ms  
+
+Успешно ли выполняется эхо-запрос от коммутатора S2 на коммутатор S3?	______________  
+	
+	Autorizaition Acceess Only  
+
+	S2>ping 192.168.1.3  
+
+	Type escape sequence to abort.  
+	Sending 5, 100-byte ICMP Echos to 192.168.1.3, timeout is 2 seconds:  
+	..!!!  
+	Success rate is 60 percent (3/5), round-trip min/avg/max = 0/0/0 ms  

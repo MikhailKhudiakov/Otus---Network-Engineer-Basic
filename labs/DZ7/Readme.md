@@ -254,9 +254,53 @@ h.	Скопируйте текущую конфигурацию в файл за
 	
 	
 #### Шаг 2:	Настройте подключенные порты в качестве транковых.
+
+	S3(config)#int range f0/1-24,g0/1-2  
+	S3(config-if-range)#switchport mode trunk  
+	S3(config-if-range)#end  
+
+	S1(config)#int range f0/1-24,g0/1-2  
+	S1(config-if-range)#switchport mode trunk  
+	S1(config-if-range)#end  
+
+	S2(config)#int range f0/1-24,g0/1-2  
+	S2(config-if-range)#switchport mode trunk  
+	S2(config-if-range)#end  
+	S2#  
 #### Шаг 3:	Включите порты F0/2 и F0/4 на всех коммутаторах.
+	
+	S1(config)#int range f0/2,f0/4  
+	S1(config-if-range)#no shutdown  
+
+	%LINK-5-CHANGED: Interface FastEthernet0/4, changed state to down  
+	S1(config-if-range)#  
+	%LINK-5-CHANGED: Interface FastEthernet0/2, changed state to up  
+
+	%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/2, changed state to up  
+
+	%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up  
+
+	S1(config-if-range)#end  
+	S1#  
+
+	S3(config)#int range f0/2,f0/4  
+	S3(config-if-range)#no shutdown  
+
+	S3(config-if-range)#  
+	%LINK-5-CHANGED: Interface FastEthernet0/2, changed state to up  
+
+	%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/2, changed state to up  
+
+	%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up  
+
+	%LINK-5-CHANGED: Interface FastEthernet0/4, changed state to up  
+
+	%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/4, changed state to up  
+
+	S3(config-if-range)#  
+	
 #### Шаг 4:	Отобразите данные протокола spanning-tree.
-Введите команду show spanning-tree на всех трех коммутаторах. Приоритет идентификатора моста рассчитывается путем сложения значений приоритета и расширенного идентификатора системы. Расширенным идентификатором системы всегда является номер сети VLAN. В примере ниже все три коммутатора имеют равные значения приоритета идентификатора моста (32769 = 32768 + 1, где приоритет по умолчанию = 32768, номер сети VLAN = 1); следовательно, коммутатор с самым низким значением MAC-адреса становится корневым мостом (в примере — S2).
+
 S1# show spanning-tree
 
 VLAN0001

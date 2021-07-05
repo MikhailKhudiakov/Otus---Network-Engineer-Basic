@@ -440,5 +440,133 @@ h.	Скопируйте текущую конфигурацию в файл за
 Почему протокол spanning-tree заменяет ранее заблокированный порт на назначенный порт и блокирует порт, который был назначенным портом на другом коммутаторе?
 	
 	Протокол STP заменяет и блокирует ранее назначенный порт, т.к. появляется порт с меньшей стоимотью пути к корневому мосту.
+#### Шаг 4:	Удалите изменения стоимости порта.
+
+a.	Выполните команду no spanning-tree cost 18 режима конфигурации интерфейса, чтобы удалить запись стоимости, созданную ранее.
+	
+	S3#conf t   
+	Enter configuration commands, one per line.  End with CNTL/Z.  
+	S3(config)#int fa0/4            
+        S3(config-if)#no spanning-tree cost 18  
+
+b.	Повторно выполните команду show spanning-tree, чтобы подтвердить, что протокол STP сбросил порт на коммутаторе некорневого моста, вернув исходные настройки порта. Протоколу STP требуется примерно 30 секунд, чтобы завершить процесс перевода порта.
+
+	S3#show spanning-tree   
+	VLAN0001  
+  	Spanning tree enabled protocol ieee  
+  	Root ID    Priority    32769  
+             Address     1c1d.8686.1d80  
+             Cost        19  
+             Port        4 (FastEthernet0/4)    
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec  
+ 	 Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)  
+             Address     ecc8.82dd.4980  
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec  
+             Aging Time  15  sec  
+	Interface           Role Sts Cost      Prio.Nbr Type  	
+	------------------- ---- --- --------- -------- --------------------------------  
+	Fa0/2               Altn BLK 19        128.2    P2p   
+	Fa0/4               Root FWD 19        128.4    P2p   
+	
+### Часть 4:	Наблюдение за процессом выбора протоколом STP порта, исходя из приоритета портов
+
+a.Включите порты F0/1 и F0/3 на всех коммутаторах.
+
+	S1(config)#int range fa0/1,fa0/3  
+	S1(config-if-range)#no shut  
+	S1(config-if-range)#  
+	*Mar  1 01:08:47.324: %LINK-3-UPDOWN: Interface FastEthernet0/1, changed state to down  
+	*Mar  1 01:08:47.332: %LINK-3-UPDOWN: Interface FastEthernet0/3, changed state to up  
+	S1(config-if-range)#  
+	*Mar  1 01:08:48.339: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/3, changed state to up  
+	S1(config-if-range)#  
+
+	S2#conf t  
+	Enter configuration commands, one per line.  End with CNTL/Z.  
+	S2(config)#int range fa0/1,fa0/3  
+	S2(config-if-range)#no shut  
+	S2(config-if-range)#  
+	*Mar  1 01:09:17.259: %LINK-3-UPDOWN: Interface FastEthernet0/1, changed state to up  
+	*Mar  1 01:09:17.268: %LINK-3-UPDOWN: Interface FastEthernet0/3, changed state to up  
+	*Mar  1 01:09:18.266: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up  
+	*Mar  1 01:09:18.274: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/3, changed state to up  
 
 
+	S3(config)#int range f0/1,f0/3  
+	S3(config-if-range)#no shut  
+	S3(config-if-range)#no shutdown   
+	S3(config-if-range)#  
+	*Mar  1 01:06:27.960: %LINK-3-UPDOWN: Interface FastEthernet0/1, changed state to down  
+	*Mar  1 01:06:27.969: %LINK-3-UPDOWN: Interface FastEthernet0/3, changed state to down  
+	*Mar  1 01:08:08.666: %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to down  
+	*Mar  1 01:08:09.354: %LINK-3-UPDOWN: Interface FastEthernet0/3, changed state to up  
+	*Mar  1 01:08:10.360: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/3, changed state to up  
+	*Mar  1 01:08:37.371: %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up  
+	*Mar  1 01:08:53.763: %LINK-3-UPDOWN: Interface FastEthernet0/1, changed state to up  
+	*Mar  1 01:08:54.929: %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up  
+
+b.	Подождите 30 секунд, чтобы протокол STP завершил процесс перевода порта, после чего выполните команду show spanning-tree на коммутаторах некорневого моста. Обратите внимание, что порт корневого моста переместился на порт с меньшим номером, связанный с коммутатором корневого моста, и заблокировал предыдущий порт корневого моста.
+
+	S2#show spanning-tree   
+	VLAN0001  
+  	Spanning tree enabled protocol ieee  
+  	Root ID    Priority    32769  
+             Address     1c1d.8686.1d80  
+             Cost        19  
+             Port        1 (FastEthernet0/1)  
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec  
+  	Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)   
+             Address     c025.5c31.8c80    
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec    
+             Aging Time  300 sec    
+	Interface           Role Sts Cost      Prio.Nbr Type  
+	------------------- ---- --- --------- -------- --------------------------------  
+	Fa0/1               Root FWD 19        128.1    P2p   
+	Fa0/2               Altn BLK 19        128.2    P2p   
+	Fa0/3               Desg FWD 19        128.3    P2p   
+	Fa0/4               Desg FWD 19        128.4    P2p   
+	S2#
+
+	S3#show spanning-tree   
+	VLAN0001  
+  	Spanning tree enabled protocol ieee  
+  	Root ID    Priority    32769  
+             Address     1c1d.8686.1d80  
+             Cost        19  
+             Port        3 (FastEthernet0/3)  
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec  
+  	Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)  
+             Address     ecc8.82dd.4980  
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec   
+             Aging Time  300 sec  
+	Interface           Role Sts Cost      Prio.Nbr Type  
+	------------------- ---- --- --------- -------- --------------------------------  
+	Fa0/1               Altn BLK 19        128.1    P2p   
+	Fa0/2               Altn BLK 19        128.2    P2p   
+	Fa0/3               Root FWD 19        128.3    P2p   
+	Fa0/4               Altn BLK 19        128.4    P2p   
+
+Какой порт выбран протоколом STP в качестве порта корневого моста на каждом коммутаторе некорневого моста? 
+
+	На коммутаторе S2 корневым портом выбран порт Fa0/1, на коммутаторе S3 корневым портом выбран порт Fa0/3.  
+
+Почему протокол STP выбрал эти порты в качестве портов корневого моста на этих коммутаторах?
+
+	В качестве порта корневого моста выбран один порт из двух ,связаннных с корневым мостом, имеющий наименьший номер порт,  
+	при равенстве приоритетов (приоритет установлен по умолчанию 128)
+
+
+Вопросы для повторения  
+1.	Какое значение протокол STP использует первым после выбора корневого моста, чтобы определить выбор порта?  	
+	
+	    Протокол STP использует значение стоимости пути к корневому мосту, чтобы определить роль (назначение) каждого порта.  
+	
+2.	Если первое значение на двух портах одинаково, какое следующее значение будет использовать протокол STP при выборе порта?
+
+	     Если стоимость пути к корневому мосту на двух портах одинакова, используется значение МАС адреса коммутатора, 
+	     премущество отдается коммутатору с наименьшим МАС-адресом.
+	   
+3.	Если оба значения на двух портах равны, каким будет следующее значение, которое использует протокол STP при выборе порта?
+	
+		Если стоимость пути к корневому мосту и МАС-адрес устройства для двух портов равны, протокол STP использует 
+		значение приоритета порта, при равенстве приоритетов преимущество получает порт с меньшим порядковым номером.

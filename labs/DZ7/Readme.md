@@ -433,6 +433,10 @@ h.	Скопируйте текущую конфигурацию в файл за
 	Fa0/2               Desg LIS 19        128.2    P2p   
 	Fa0/4               Root FWD 18        128.4    P2p     
 	S3#
+	
+![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ7/%D0%A7%D0%B0%D1%81%D1%82%D1%8C%203%20%D1%88%D0%B0%D0%B3%203_1.bmp)
+![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ7/%D0%A7%D0%B0%D1%81%D1%82%D1%8C%203%20%D1%88%D0%B0%D0%B3%203_2.bmp)
+![](https://github.com/MikhailKhudiakov/Otus---Network-Engineer-Basic/blob/main/labs/DZ7/%D0%A7%D0%B0%D1%81%D1%82%D1%8C%203%20%D1%88%D0%B0%D0%B3%203_3.bmp)
 Почему протокол spanning-tree заменяет ранее заблокированный порт на назначенный порт и блокирует порт, который был назначенным портом на другом коммутаторе?
 	
 	Протокол STP заменяет и блокирует ранее назначенный порт, т.к. появляется порт с меньшей стоимотью пути к корневому мосту.

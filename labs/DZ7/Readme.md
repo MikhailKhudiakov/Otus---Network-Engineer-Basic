@@ -383,3 +383,58 @@ h.	Скопируйте текущую конфигурацию в файл за
 
 	Порт Fa0/2 S3 выбран альтернативным, т.к. при равенстве стоимости пути к корневому мосту и BID коммутатор S3 имеет МАС-адрес
 	выше, чем коммутатор S2.
+### Часть 3
+
+#### Шаг 1:	Определите коммутатор с заблокированным портом.
+
+	S3#show spanning-tree 		
+	VLAN0001  
+  	Spanning tree enabled protocol ieee  
+ 	Root ID    Priority    32769  
+             	Address     1c1d.8686.1d80  
+             	Cost        19  
+             	Port        4 (FastEthernet0/4)  
+             	Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec  
+  	Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)  
+            	 Address     ecc8.82dd.4980  
+             	Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec  
+             	Aging Time  15  sec  
+	Interface           Role Sts Cost      Prio.Nbr Type  
+	------------------- ---- --- --------- -------- --------------------------------  
+	Fa0/2               Altn BLK 19        128.2    P2p   
+	Fa0/4               Root FWD 19        128.4    P2p   
+	
+#### Шаг 2:	Измените стоимость порта.
+
+Помимо заблокированного порта, единственным активным портом на этом коммутаторе является порт,
+выделенный в качестве порта корневого моста. Уменьшите стоимость этого порта корневого моста до 18,
+выполнив команду spanning-tree cost 18 режима конфигурации интерфейса.
+		
+	S3(config)#int fa0/2  
+	S3(config-if)#spanning-tree cost 18  
+	S3(config-if)#end
+	
+#### Шаг 3:	Просмотрите изменения протокола spanning-tree.
+
+	S3#show spanning-tree   
+	VLAN0001  
+  	Spanning tree enabled protocol ieee  
+  	Root ID    Priority    32769  
+             Address     1c1d.8686.1d80    
+             Cost        18    
+             Port        4 (FastEthernet0/4)    
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec     
+  	Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)    
+             Address     ecc8.82dd.4980       
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec      
+             Aging Time  15  sec    
+	Interface           Role Sts Cost      Prio.Nbr Type  
+	------------------- ---- --- --------- -------- --------------------------------  
+	Fa0/2               Desg LIS 19        128.2    P2p   
+	Fa0/4               Root FWD 18        128.4    P2p     
+	S3#
+Почему протокол spanning-tree заменяет ранее заблокированный порт на назначенный порт и блокирует порт, который был назначенным портом на другом коммутаторе?
+	
+	Протокол STP заменяет и блокирует ранее назначенный порт, т.к. появляется порт с меньшей стоимотью пути к корневому мосту.
+
+
